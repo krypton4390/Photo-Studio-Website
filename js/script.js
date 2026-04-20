@@ -18,13 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Mobile Menu Toggle ---
     const mobileMenu = document.getElementById('mobile-menu');
     const navLinks = document.querySelector('.nav-links');
+    const body = document.body;
 
     if (mobileMenu) {
         mobileMenu.addEventListener('click', () => {
             navLinks.classList.toggle('active');
             mobileMenu.classList.toggle('is-active');
+            body.classList.toggle('menu-open');
         });
     }
+
 
     // --- Intersection Observer for Scroll Reveals ---
     const revealElements = document.querySelectorAll('.reveal');
@@ -91,8 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Close mobile menu if open
                 navLinks.classList.remove('active');
                 if (mobileMenu) mobileMenu.classList.remove('is-active');
+                body.classList.remove('menu-open');
 
                 window.scrollTo({
+
                     top: targetElement.offsetTop - 70, // Adjust for navbar height
                     behavior: 'smooth'
                 });

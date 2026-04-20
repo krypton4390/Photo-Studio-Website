@@ -46,6 +46,11 @@ body {
     overflow-x: hidden;
 }
 
+body.menu-open {
+    overflow: hidden;
+}
+
+
 h1, h2, h3 {
     font-family: var(--font-heading);
     letter-spacing: 1px;
@@ -150,6 +155,38 @@ img {
     width: 100%;
 }
 
+/* Mobile Menu Toggle Styling */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.menu-toggle .bar {
+    width: 100%;
+    height: 3px;
+    background-color: var(--text-main);
+    transition: var(--transition-smooth);
+    border-radius: 10px;
+}
+
+.menu-toggle.is-active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-toggle.is-active .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.menu-toggle.is-active .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+
 /* Hero Section */
 .hero {
     height: 100vh;
@@ -190,13 +227,14 @@ img {
     font-weight: 700;
 }
 
-.hero p {
+.hero p, .reveal-subtitle {
     font-size: 1.2rem;
     color: var(--text-muted);
     margin-bottom: 40px;
     letter-spacing: 3px;
     text-transform: uppercase;
 }
+
 
 .hero-btns {
     display: flex;
@@ -392,24 +430,29 @@ img {
 }
 
 /* Video Section */
-.video-container {
-    position: relative;
-    padding-bottom: 56.25%; /* 16:9 */
-    height: 0;
-    overflow: hidden;
+.local-video-wrapper {
     max-width: 1000px;
     margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
     box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+    background: #000;
+    border: 1px solid rgba(var(--accent-gold-rgb), 0.2);
+    min-height: 300px; /* Ensure visibility for Intersection Observer */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+
+.main-video {
     width: 100%;
-    height: 100%;
-    border: 0;
+    max-height: 700px;
+    display: block;
+    background: #000;
 }
+
+
 
 /* About Section */
 .about-flex {
@@ -516,14 +559,29 @@ footer {
 /* Reveal Animations */
 .reveal {
     opacity: 0;
-    transform: translateY(50px);
-    transition: opacity 1s ease-out, transform 1s ease-out;
+    transform: translateY(30px);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .reveal.active {
     opacity: 1;
     transform: translateY(0);
 }
+
+.reveal-text {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealText 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.3s;
+}
+
+@keyframes revealText {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 /* --- New Page Specific Styles --- */
 
@@ -656,15 +714,61 @@ footer {
 /* Responsive Fixes */
 @media (max-width: 992px) {
     .price-card.featured { transform: scale(1); }
+    .about-flex {
+        flex-direction: column;
+        text-align: center;
+    }
+    .about-img::after {
+        display: none;
+    }
+    .contact-wrapper {
+        flex-direction: column;
+    }
+    .about-stats {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
 }
 
 @media (max-width: 768px) {
-    .nav-links {
-        display: none;
+    .menu-toggle {
+        display: flex;
     }
+
+    .nav-links {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        height: 100vh;
+        width: 100%;
+        background-color: var(--primary-bg);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-smooth);
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-links li {
+        margin: 15px 0;
+    }
+
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+
     .hero h1 {
         font-size: 3rem;
     }
+
+    .section {
+        padding: 60px 0;
+    }
+
     .gallery-grid {
         grid-template-columns: 1fr;
     }
@@ -672,4 +776,27 @@ footer {
     .gallery-item {
         height: 300px;
     }
+
+    .pricing-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .page-header h1 {
+        font-size: 2.5rem;
+    }
 }
+
+@media (max-width: 480px) {
+    .hero-btns {
+        flex-direction: column;
+        width: 100%;
+        padding: 0 20px;
+    }
+    .btn {
+        width: 100%;
+    }
+    .logo {
+        font-size: 1.4rem;
+    }
+}
+
